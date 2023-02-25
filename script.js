@@ -1,122 +1,58 @@
-var mazeWidth = 10;
-var mazeHeight = 10;
-var startPosX = 0;
-var startPosY = 0;
-var endPosX = mazeWidth - 1;
-var endPosY = mazeHeight - 1;
-var currentPosX = startPosX;
-var currentPosY = startPosY;
+const player = document.getElementById("player");
+const end = document.getElementById("end");
+const walls = document.querySelectorAll(".wall");
 
-var player = document.getElementById("player");
-var end = document.getElementById("end");
-var walls = document.getElementsByClassName("wall");
+document.addEventListener("keydown", function(event) {
+  movePlayer(event.key);
+});
 
-function movePlayer(event) {
-  switch (event.keyCode) {
-    case 37: // Left arrow key
-      if (currentPosX > 0 && maze[currentPosY][currentPosX - 1] !== "W") {
-        currentPosX--;
-        updatePlayerPosition();
-      }
+function movePlayer(key) {
+  const leftWall = parseInt(window.getComputedStyle(player).getPropertyValue("left"));
+  const topWall = parseInt(window.getComputedStyle(player).getPropertyValue("top"));
+
+  switch(key) {
+    case "ArrowUp":
+      player.style.top = (topWall - 20) + "px";
       break;
-    case 38: // Up arrow key
-      if (currentPosY > 0 && maze[currentPosY - 1][currentPosX] !== "W") {
-        currentPosY--;
-        updatePlayerPosition();
-      }
+    case "ArrowDown":
+      player.style.top = (topWall + 20) + "px";
       break;
-    case 39: // Right arrow key
-      if (currentPosX < mazeWidth - 1 && maze[currentPosY][currentPosX + 1] !== "W") {
-        currentPosX++;
-        updatePlayerPosition();
-      }
+    case "ArrowLeft":
+      player.style.left = (leftWall - 20) + "px";
       break;
-    case 40: // Down arrow key
-      if (currentPosY < mazeHeight - 1 && maze[currentPosY + 1][currentPosX] !== "W") {
-        currentPosY++;
-        updatePlayerPosition();
-      }
+    case "ArrowRight":
+      player.style.left = (leftWall + 20) + "px";
       break;
   }
-  
-  checkCollisions();
+
+  checkCollision(player);
+  checkWin();
 }
 
-
-function checkCollisions() {
-  // Verifica se o jogador chegou ao fim do labirinto
-  if (player.offsetLeft == end.offsetLeft && player.offsetTop == end.offsetTop) {
-    alert("Parabéns, você venceu!");
-  }
-
-  // Verifica se o jogador colidiu com uma parede
-  for (var i = 0; i < walls.length; i++) {
-    if (player.offsetLeft == walls[i].offsetLeft && player.offsetTop == walls[i].offsetTop) {
-      alert("Você bateu em uma parede! Tente novamente.");
-      resetGame();
+function checkCollision(player) {
+  walls.forEach(function(wall) {
+    if (isColliding(player, wall)) {
+      alert("Você perdeu!");
+      location.reload();
     }
+  });
+}
+
+function checkWin() {
+  if (isColliding(player, end)) {
+    alert("Você ganhou!");
+    location.reload();
   }
 }
 
-function movePlayer(event) {
-  switch (event.keyCode) {
-  case 37: // Left arrow key
-  if (
-  currentPosX > 0 &&
-  maze[currentPosY][currentPosX - 1] !== "W"
-  ) {
-  currentPosX--;
-  updatePlayerPosition();
-  }
-  break;
-  case 38: // Up arrow key
-  if (
-  currentPosY > 0 &&
-  maze[currentPosY - 1][currentPosX] !== "W"
-  ) {
-  currentPosY--;
-  updatePlayerPosition();
-  }
-  break;
-  case 39: // Right arrow key
-  if (
-  currentPosX < mazeWidth - 1 &&
-  maze[currentPosY][currentPosX + 1] !== "W"
-  ) {
-  currentPosX++;
-  updatePlayerPosition();
-  }
-  break;
-  case 40: // Down arrow key
-  if (
-  currentPosY < mazeHeight - 1 &&
-  maze[currentPosY + 1][currentPosX] !== "W"
-  ) {
-  currentPosY++;
-  updatePlayerPosition();
-  }
-  break;
-  }
-  }
-  
-  function updatePlayerPosition() {
-  var player = document.getElementById("player");
-  player.style.left = currentPosX * tileSize + "px";
-  player.style.top = currentPosY * tileSize + "px";
-  
-  if (currentPosX === endPosX && currentPosY === endPosY) {
-  alert("Congratulations, you won!");
-  initializeGame();
-  }
-  }
-  
-  function initializeGame() {
-  maze = generateMaze(mazeWidth, mazeHeight);
-  currentPosX = startPosX;
-  currentPosY = startPosY;
-  renderMaze();
-  updatePlayerPosition();
-  }
-  
-  // Initialize the game
-  initializeGame();
+function isColliding(a, b) {
+  const aRect = a.getBoundingClientRect();
+  const bRect = b.getBoundingClientRect();
+
+  return !(
+    (aRect.bottom < bRect.top) ||
+    (aRect.top > bRect.bottom) ||
+    (aRect.right < bRect.left) ||
+    (aRect.left > bRect.right)
+  );
+}
