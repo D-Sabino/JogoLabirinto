@@ -1,0 +1,73 @@
+#container {
+    width: 400px;
+    height: 400px;
+    margin: 0 auto;
+    position: relative;
+    background-color: #ddd;
+  }
+  
+  #player {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: red;
+  }
+  
+  #end {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 360px;
+    left: 360px;
+    background-color: green;
+  }
+  
+  .wall {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    background-color: #333;
+  }
+  
+  #wall1 {
+    top: 60px;
+    left: 60px;
+  }
+  
+  #wall2 {
+    top: 100px;
+    left: 140px;
+  }
+  
+  #wall3 {
+    top: 180px;
+    left: 60px;
+  }
+  
+  #wall4 {
+    top: 220px;
+    left: 220px;
+  }
+  
+  #wall5 {
+    top: 300px;
+    left: 140px;
+  }
+  
+  #wall6 {
+    top: 340px;
+    left: 60px;
+  }
+  
+  #wall7 {
+    top: 140px;
+    left: 300px;
+  }
+  
+  #wall8 {
+    top: 260px;
+    left: 300px;
+  }
+  
