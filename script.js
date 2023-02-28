@@ -1,37 +1,39 @@
-const player = document.getElementById("player");
-const end = document.getElementById("end");
-const walls = document.querySelectorAll(".wall");
+const PLAYER = document.querySelector(".player");
+const END = document.querySelector(".end");
+const WALLS = document.querySelectorAll(".wall");
 
-document.addEventListener("keydown", function(event) {
+document.addEventListener("keydown", handleKeyDown);
+
+function handleKeyDown(event) {
   movePlayer(event.key);
-});
+}
 
 function movePlayer(key) {
-  const leftWall = parseInt(window.getComputedStyle(player).getPropertyValue("left"));
-  const topWall = parseInt(window.getComputedStyle(player).getPropertyValue("top"));
+  const leftWall = parseInt(window.getComputedStyle(PLAYER).getPropertyValue("left"));
+  const topWall = parseInt(window.getComputedStyle(PLAYER).getPropertyValue("top"));
 
-  switch(key) {
+  switch (key) {
     case "ArrowUp":
-      player.style.top = (topWall - 20) + "px";
+      PLAYER.style.top = `${topWall - 20}px`;
       break;
     case "ArrowDown":
-      player.style.top = (topWall + 20) + "px";
+      PLAYER.style.top = `${topWall + 20}px`;
       break;
     case "ArrowLeft":
-      player.style.left = (leftWall - 20) + "px";
+      PLAYER.style.left = `${leftWall - 20}px`;
       break;
     case "ArrowRight":
-      player.style.left = (leftWall + 20) + "px";
+      PLAYER.style.left = `${leftWall + 20}px`;
       break;
   }
 
-  checkCollision(player);
+  checkCollision();
   checkWin();
 }
 
-function checkCollision(player) {
-  walls.forEach(function(wall) {
-    if (isColliding(player, wall)) {
+function checkCollision() {
+  WALLS.forEach((wall) => {
+    if (isColliding(PLAYER, wall)) {
       alert("Você perdeu!");
       location.reload();
     }
@@ -39,7 +41,7 @@ function checkCollision(player) {
 }
 
 function checkWin() {
-  if (isColliding(player, end)) {
+  if (isColliding(PLAYER, END)) {
     alert("Você ganhou!");
     location.reload();
   }
@@ -50,9 +52,9 @@ function isColliding(a, b) {
   const bRect = b.getBoundingClientRect();
 
   return !(
-    (aRect.bottom < bRect.top) ||
-    (aRect.top > bRect.bottom) ||
-    (aRect.right < bRect.left) ||
-    (aRect.left > bRect.right)
+    aRect.bottom < bRect.top ||
+    aRect.top > bRect.bottom ||
+    aRect.right < bRect.left ||
+    aRect.left > bRect.right
   );
 }
